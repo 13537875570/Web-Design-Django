@@ -1,0 +1,214 @@
+
+{% extends "news/base.html" %}
+{% load static %}
+{% load humanize %}
+
+
+
+{% block pagetitle %}
+    <div class="n3">
+<h1 style="font-family: Times">Scenarios</h1>
+
+
+</div>
+    <div class="div3">
+<i class="fas fa-user-alt"></i>
+
+
+
+<!-- Username and a Logout Button -->
+<!-- If the visitor has not login, it will be nothing here then -->
+        {% if request.session.username %}
+<FONT style="FONT-SIZE: 10pt; FILTER: shadow(color = lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial"><strong><a href="{% url 'users:profile' request.session.username %}">{{ request.session.username }}</a></strong></FONT>
+
+<a href="{% url 'users:logout' %}"><button type="button">Logout</button></a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+{% block content %}
+
+
+
+
+
+<p>
+<h1 >
+
+
+<div class="div1">
+<form action="{% url "news:search" %}" method="get">
+    {% if request.session.username %}
+<input type="text" name="search-scenario" placeholder="search-scenario">
+<input type="submit" name="submit" value="search">
+    {% endif %}
+</form>
+
+
+</div>
+<div class="n3">
+<!-- Subtitle -->
+<FONT style="FONT-SIZE: 17pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: green; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">------New Scenarios Available!! </FONT>
+</div>
+<div class="div3">
+
+
+<!-- Purchase Button, only available for Users logged in-->
+    {% if request.session.username %}
+<a href="https://www.taleworlds.com/en/Games/Bannerlord"><button type="button" style="background-color: #7ED321;color: #FFFFFF;width:150px;height:60px">Buy Now for $59.9</button></a>
+{% endif %}
+</div>
+</h1>
+
+
+
+
+</p>
+
+
+<p>
+
+<div class="n3">
+<ul>
+
+<!-- The Navigation menu. Every page will have this menu -->
+<!-- All of the buttons have corresponding hyperlinks to their names -->
+    {% if request.session.username %}<!-- "Home" will link to different pages for a login user and a unlogin visitor -->
+<li><a href="{% url 'news:home' %}">Home</a></li><!-- go to Homepage -->
+    {% else %}
+<li><a href="{% url 'news:alter' %}">Home</a></li><!-- go to HomeNotLogin -->
+    {% endif %}
+
+<li><a href="{% url 'news:scenariolist' %}">Scenarios</a></li><!-- Item list page button -->
+    {% if request.session.username %}
+<li><a href="{% url 'news:add' %}">Add</a></li><!-- Add Item page button. Only a login user can see it. -->
+<li><a href="{% url 'users:userlist' %}">Userlist</a></li><!-- list of users  -->
+    {% endif %}
+
+
+</ul>
+</div>
+
+</p>
+
+
+
+
+
+
+
+    {% if messages %}
+
+        <div class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}><font ><b>{{ message }}</b></font></li>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+
+
+
+
+
+    {% for story in stories %}
+        <br />
+
+
+        <a href="{% url 'news:detail' story.id %}"><FONT style="FONT-SIZE: 200%; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">({{ story.id }}){{ story.year }} {{ story.title }}</FONT></a>
+
+        <div class="text1">
+        {% if story.id|divisibleby:4 %}
+        <img src="{% static "img/s4-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% elif story.id|divisibleby:2 %}
+        <img src="{% static "img/s2-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% elif story.id|divisibleby:3 %}
+        <img src="{% static "img/s3-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% else %}
+
+        <img src="{% static "img/s1-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% endif %}
+
+            <div class="text1">
+            <p><FONT style="FONT-SIZE: 200%; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><b>Description:&nbsp;</b></FONT><FONT style="FONT-SIZE: 170%">{{ story.description}}</FONT></p>
+            </div>
+            <div class="text1">
+            <p><FONT style="FONT-SIZE: 200%; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><b>Detected Language:&nbsp;</b></FONT><FONT style="FONT-SIZE: 170%">{{ story.language}}</FONT></p>
+            </div>
+
+
+
+</div>
+
+<div class="text1">
+<h1>
+<FONT style="FONT-SIZE: 10pt;  WIDTH: 70%;  COLOR: black; LINE-HEIGHT: 70%; FONT-FAMILY: Arial">
+    <p>
+     <a>{{ story.date }}&nbsp;&nbsp;</a>
+        {% if request.sessions.username %}
+    Post by <a href="{% url 'users:profile' story.user.username %}">{{ story.user.username }}</a>
+        {% endif %}
+    </p>
+</FONT></h1>
+</div>
+
+
+        {% if request.session.username %}
+            <div class="upvote">
+            <button class="upvote" data-story-id="{{ story.id }}" data-ajax-url="{% url "news:story-upvote" %}">Upvote</button>
+            <button class="upvote" data-story-id="{{ story.id }}" data-ajax-url="{% url "news:story-upvoteIII" %}">Upvote+3</button>
+            <button class="upvote" data-story-id="{{ story.id }}" data-ajax-url="{% url "news:story-upvoteV" %}">Upvote+5</button>
+            </div>
+        {% endif %}
+        <div class="score">Num of Votes: {{ story.num }}, Average Score: {{ story.ave }}</div>
+
+
+
+
+<div class="text1">
+<!--
+Edit link
+-->
+{% if request.session.role == 'admin' %}
+<a href="{% url 'news:detail' story.id %}"><input type="submit" value="Edit"/></a>
+{% endif %}
+
+<!--
+Delete buttons and functions
+-->
+<form action = "{% url "news:delete" story.id %}" method = "POST" >
+
+{% if request.session.role == 'admin' %}
+
+    <input type="submit" value="Delete" />
+{% endif %}
+
+{% csrf_token %}
+</form>
+<!-- end delete-->
+
+
+</div>
+
+
+
+<br>
+<br>
+    {% endfor %}
+
+
+
+<script src=" {% static "js/upvoteAjax.js" %}"></script>
+
+{% endblock %}
+

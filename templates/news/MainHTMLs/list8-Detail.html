@@ -1,0 +1,288 @@
+
+{% extends "news/base.html" %}
+<!-- This is the Detail page extended from base.html-->
+
+{% load static %}
+{% load humanize %}
+
+
+
+{% block pagetitle %}
+    <!-- Big Title of this page -->
+    <div class="n3">
+<h1 style="font-family: Times">{{ story.title }}</h1>
+
+
+</div>
+    <div class="div3">
+<i class="fas fa-user-alt"></i>
+
+
+
+<!-- Username and a Logout Button -->
+<!-- If the visitor has not login, it will be nothing here then -->
+<FONT style="FONT-SIZE: 10pt; FILTER: shadow(color = lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial"><strong><a href="{% url 'users:profile' request.session.username %}">{{ request.session.username }}</a></strong></FONT>
+        {% if request.session.username %}
+<a href="{% url 'users:logout' %}"><button type="button">Logout</button></a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+{% block content %}
+
+
+<p>
+<h1 >
+
+<!-- This is a Search Box. If you print a right name of a scenario here, you can find it -->
+<!-- 4 Correct Scenario Names(No Space before the first word or after the last word): -->
+<!-- The Fall of Empire -->
+<!-- Divided Continent -->
+<!-- Mediterranean War -->
+<!-- Nord Invasion -->
+<div class="div1">
+<form action="{% url "news:search" %}" method="get">
+<input type="text" name="search-scenario" placeholder="search-scenario">
+<input type="submit" name="submit" value="search">
+</form>
+
+</div>
+<div class="n3">
+<!-- A Subtitle of the page -->
+<FONT style="FONT-SIZE: 17pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: green; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">Different Changeable Battles </FONT>
+</div>
+<div class="div3">
+
+
+<!-- Purchase Button, only available for Users logged in-->
+<a href="https://www.taleworlds.com/en/Games/Bannerlord"><button type="button" style="background-color: #7ED321;color: #FFFFFF;width:150px;height:60px">Buy Now for $59.9</button></a>
+
+</div>
+</h1>
+
+
+
+
+</p>
+
+
+<p>
+
+<div class="n3">
+<ul>
+<!-- The Navigation menu. Every page will have this menu -->
+<!-- All of the buttons have corresponding hyperlinks to their names -->
+    {% if request.session.username %}<!-- "Home" will link to different pages for a login user and a unlogin visitor -->
+<li><a href="{% url 'news:home' %}">Home</a></li><!-- go to Homepage -->
+    {% else %}
+<li><a href="{% url 'news:alter' %}">Home</a></li><!-- go to HomeNotLogin -->
+    {% endif %}
+
+<li><a href="{% url 'news:scenariolist' %}">Scenarios</a></li><!-- Item list page button -->
+    {% if request.session.username %}
+<li><a href="{% url 'news:add' %}">Add</a></li><!-- Add Item page button. Only a login user can see it. -->
+<!-- Edit Item page button. Only a login user can see it. -->
+    {% endif %}
+<li><a href="{% url 'users:userlist' %}">Userlist</a></li><!-- list of users  -->
+</ul>
+</div>
+
+</p>
+
+
+
+
+
+
+<!-- list of item detail information -->
+<!-- Each item's id, title and description will be listed in order -->
+        <a><FONT style="FONT-SIZE: 200%; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">({{ story.id }}){{ story.year}} {{ story.title }}</FONT></a>
+
+        <div class="text1">
+        {% if story.id|divisibleby:4 %}
+        <img src="{% static "img/s4-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% elif story.id|divisibleby:2 %}
+        <img src="{% static "img/s2-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% elif story.id|divisibleby:3 %}
+        <img src="{% static "img/s3-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% else %}
+
+        <img src="{% static "img/s1-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+        {% endif %}
+            <div class="text1">
+            <p><a><FONT style="FONT-SIZE: 200%; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><b>Description:&nbsp;</b></FONT><FONT style="FONT-SIZE: 170%">{{ story.description}}</FONT></a></p>
+            </div>
+            <div class="text1">
+            <p><a><FONT style="FONT-SIZE: 200%; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><b>Detected Language:&nbsp;</b></FONT><FONT style="FONT-SIZE: 170%">{{ story.language}}</FONT></a></p>
+            </div>
+            <div class="text1">
+            <p><a><FONT style="FONT-SIZE: 200%; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><b>Language Confidence Score(0~1):&nbsp;</b></FONT><FONT style="FONT-SIZE: 170%">{{ story.ConfidenceScore}}</FONT></a></p>
+            </div>
+    <p> <a href="{{ story.url }}">{{ story.url }}</a></p>
+
+
+
+</div>
+
+<div class="text1">
+<h1>
+<FONT style="FONT-SIZE: 10pt;  WIDTH: 70%;  COLOR: black; LINE-HEIGHT: 70%; FONT-FAMILY: Arial">
+     <a>{{ story.date }}&nbsp;&nbsp;</a>
+    <a>Post by {{ story.author }}</a>
+</FONT></h1>
+</div>
+
+<br /><br />
+
+
+        <!-- Edit buttons and functions -->
+<form action = "{% url "news:edit" story.id %}" method = "POST" >
+
+{% if request.session.role == 'admin' %}
+<p><FONT style="FONT-SIZE: 200%; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><b>Edit this Scenario:&nbsp;</b></FONT></p>
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="title"><b>Title*: </b></label></FONT>
+<input id="title" name="title" type="text" required/>
+
+
+<FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="year"><b>Year*:</b> </label></FONT>
+<input id="year" name="year" type="text" required/>
+
+<h1><FONT style="FONT-SIZE: 15pt; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="description"><b>Description:&nbsp;</b></label></FONT>
+</h1>
+
+
+
+<p>
+<td><textarea id="description" name="description"   cols="80"   rows="7"   style="OVERFLOW:   hidden"></textarea></td>
+</p>
+
+    <input type="submit" value="Edit" />
+{% endif %}
+
+{% csrf_token %}
+</form>
+<!-- end edit-->
+
+
+
+
+
+
+{% for comment in comments %}
+    <br /><br /><br />
+    <h1><FONT style="FONT-SIZE: 15pt; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="content"><b>Comment {{ comment.id }}:</b></label></FONT>
+</h1>
+<p>
+<a>{{ comment.content }}</a>
+    <a>{{ comment.date }}</a>
+Post by <a href="{% url 'users:profile' comment.author %}">{{ comment.author }}</a>
+
+</p>
+
+
+
+
+{% if  request.session.role == 'admin' or request.session.username == comment.author%}
+<!-- Delete comment buttons and functions -->
+<form action = "{% url "news:delcomment" comment.id %}" method = "POST" >
+
+
+
+    <input type="submit" value="Delete" />
+
+
+{% csrf_token %}
+</form>
+{% endif %}
+
+<!-- Edit comment buttons and functions -->
+<form action = "{% url "news:editcomment" comment.id %}" method = "POST" >
+
+{% if  request.session.role == 'admin' or request.session.username == comment.author %}
+
+
+<h1><FONT style="FONT-SIZE: 15pt; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="content"><b>Edit Comment:</b></label></FONT>
+</h1>
+
+<p>
+<td><textarea id="content" name="content"   cols="80"   rows="7"   style="OVERFLOW:   hidden"></textarea></td>
+</p>
+
+    <input type="submit" value="Edit" />
+{% endif %}
+
+{% csrf_token %}
+</form>
+
+
+{% empty %}
+
+    <li>No comments now.</li>
+
+{% endfor %}
+
+    <h4>More from Wikipedia: </h4>
+    <p><a href="http://en.wikipedia.org/wiki/{{ top_title|urlencode }}">{{ top_title }}</a></p>
+
+
+<br /><br /><br />
+    <form action = "{% url "news:addcomment" story.id %}" method = "post">
+
+
+{% if request.session.username %}
+
+<h1><FONT style="FONT-SIZE: 15pt; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="content"><b>Add a Comment:</b></label></FONT>
+</h1>
+
+
+
+<p>
+<td><textarea id="content" name="content"   cols="80"   rows="7"   style="OVERFLOW:   hidden"></textarea></td>
+</p>
+
+
+    <p>
+
+    <a><b>Description required. </b></a>
+
+    </p>
+
+<!-- click on Submit to save-->
+    <p>
+
+    <button type="submit" style="background-color: #7ED321;color: #FFFFFF;width:170px;height:70px;margin:20px" >Submit</button>
+
+{% endif %}
+    {% csrf_token %}
+
+
+
+
+
+
+
+
+
+</p>
+
+    </form>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+

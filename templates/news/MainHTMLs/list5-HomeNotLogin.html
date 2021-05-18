@@ -1,0 +1,121 @@
+
+
+{% extends "news/base.html" %}
+<!-- This is the Homepage(for unlogin visitor) extended from base.html-->
+
+{% load static %}
+
+
+
+{% block pagetitle %}
+    <!-- Big Title of this page -->
+    <div class="n3">
+<h1 style="font-family: Times">Mount and Blade III: Destiny</h1>
+
+
+</div>
+    <!-- A Subtitle of the page -->
+    <h1 align="center"><FONT style="FONT-SIZE: 17pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: green; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">New Scenarios Available!! </FONT></h1>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+<div class="n3">
+<ul>
+<!-- The Navigation menu. Every page will have this menu -->
+<!-- All of the buttons have corresponding hyperlinks to their names -->
+    {% if request.session.username %}<!-- "Home" will link to different pages for a login user and a unlogin visitor -->
+<li><a href="{% url 'news:home' %}">Home</a></li><!-- go to Homepage -->
+    {% else %}
+<li><a href="{% url 'news:alter' %}">Home</a></li><!-- go to HomeNotLogin -->
+    {% endif %}
+
+<li><a href="{% url 'news:scenariolist' %}">Scenarios</a></li><!-- Item list page button -->
+    {% if request.session.username %}
+<li><a href="{% url 'news:add' %}">Add</a></li><!-- Add Item page button. Only a login user can see it. -->
+<li><a href="{% url 'users:userlist' %}">Userlist</a></li><!-- list of users  -->
+    {% endif %}
+</ul>
+</div>
+
+
+<!-- Paragraph of images -->
+<p>
+<div border="0" align="center" style="margin-left:0px">
+<img src="{% static "img/mnd1-1.jpg" %}" width="25%" height="25%" />
+
+    <img src="{% static "img/mnd4-1.jpg" %}" width="25%" height="25%" /> </div>
+
+
+
+
+
+</p>
+
+
+
+
+
+<p>
+<div class="n3"><h1><FONT style="FONT-SIZE: 15pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: blue; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">Log in to Try More Functions!</FONT></h1></div>
+
+
+
+    <!-- A login box.-->
+    <!-- If you have already login, you will see your username and a logout button here -->
+    {% if request.session.username %}
+
+        <form align="center" id="login-box">
+            <p>logged in as <strong>{{ request.session.username }}</strong></p> | <a href="{% url 'news:logout' %}">log out</a>
+        </form>
+
+    <!-- Enter correct username and password to login -->
+
+    <!-- Regular User: username: user, password: user -->
+    <!-- Administrator: username: wentao, password: wentao -->
+    {% else %}
+    <form align="center" id="login-box" action="{% url "users:login" %}" method="POST">
+    {% csrf_token %}
+        <div class="n3">
+    <input type="text" name="username" placeholder="username">
+        </div>
+        <div class="n3">
+    <input type="password" name="password" placeholder="password">
+            </div>
+        <input type="submit" name="submit" value="log in"> or <a href="{% url 'users:register' %}">register</a>
+
+    </form>
+
+    {% endif %}
+
+
+
+
+
+</p>
+
+
+
+{% endblock %}
+
+
+{% block sidebar %}
+    {% include "actions/action/feed.html" %}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

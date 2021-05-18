@@ -1,0 +1,207 @@
+
+{% extends "news/base.html" %}
+<!-- This is the Add Item page extended from base.html-->
+
+{% load static %}
+
+
+
+{% block pagetitle %}
+    <!-- Big Title of this page -->
+    <div class="n3">
+<h1 style="font-family: Times">Register</h1>
+
+
+</div>
+    <div class="div3">
+<i class="fas fa-user-alt"></i>
+
+
+
+<!-- Username and a Logout Button -->
+<!-- If the visitor has not login, it will be nothing here then -->
+<FONT style="FONT-SIZE: 10pt; FILTER: shadow(color = lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial"><strong>{{ request.session.username }}</strong></FONT>
+        {% if request.session.username %}
+<a href="{% url 'news:logout' %}"><button type="button">Logout</button></a>
+        {% endif %}
+</div>
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+
+
+
+<p>
+
+<h1 >
+
+<!-- This is a Search Box. If you print a right name of a scenario here, you can find it -->
+<!-- 4 Correct Scenario Names(No Space before the first word or after the last word): -->
+<!-- The Fall of Empire -->
+<!-- Divided Continent -->
+<!-- Mediterranean War -->
+<!-- Nord Invasion -->
+<div class="div1">
+<form action="{% url "news:search" %}" method="get">
+<input type="text" name="search-scenario" placeholder="search-scenario">
+<input type="submit" name="submit" value="search">
+</form>
+
+</div>
+<div class="n3">
+
+<!-- A Subtitle of the page -->
+<FONT style="FONT-SIZE: 17pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: green; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">Found a good name for your account?</FONT>
+</div>
+<div class="div3">
+
+
+<!-- Purchase Button -->
+<button type="button" style="background-color: #7ED321;color: #FFFFFF;width:150px;height:60px">Buy Now for $59.9</button>
+</div>
+</h1>
+
+
+
+
+</p>
+
+
+<p>
+
+
+
+
+
+
+
+<div class="n3">
+<ul>
+<!-- The Navigation menu. Every page will have this menu -->
+<!-- All of the buttons have corresponding hyperlinks to their names -->
+    {% if request.session.username %}<!-- "Home" will link to different pages for a login user and a unlogin visitor -->
+<li><a href="{% url 'news:home' %}">Home</a></li><!-- go to Homepage -->
+    {% else %}
+<li><a href="{% url 'news:alter' %}">Home</a></li><!-- go to HomeNotLogin -->
+    {% endif %}
+
+<li><a href="{% url 'news:list' %}">Scenario</a></li><!-- Item list page button -->
+    {% if request.session.username %}
+<li><a href="{% url 'news:add' %}">Add</a></li><!-- Add Item page button. Only a login user can see it. -->
+<!-- Edit Item page button. Only a login user can see it. -->
+    {% endif %}
+<li><a href="{% url 'news:scenariolist' %}">Detail</a></li><!-- Detail page button -->
+</ul>
+</div>
+
+</p>
+
+
+
+
+    <div class="n3">
+
+
+
+    <!-- register function -->
+    <form id="register-user" action = "{% url 'users:register' %}" method = "post">
+
+
+
+<p>
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="register-username"><b>Username*: </b></label></FONT>
+<input id="register-username" name="username" type="text" required/>
+
+</p>
+
+
+<p>
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="register-password"><b>Password*: </b></label></FONT>
+<input id="register-password" name="password" type="password" required/>
+
+</p>
+
+
+<p>
+<FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="register-email"><b>Email*:</b> </label></FONT>
+<input id="register-email" name="email" type="email" required/>
+
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <p>
+
+    <a><b>* = required. </b></a>
+
+    </p>
+
+<!-- click on Submit to save -->
+    <p>
+
+    <button type="button" style="background-color: #FF8000;color: #FFFFFF;width:170px;height:70px;margin:20px" onclick="edit_confirm()">Edit</button><!-- No function right now  -->
+    <button type="submit" style="background-color: #7ED321;color: #FFFFFF;width:170px;height:70px;margin:20px" >Register</button><!-- Submit button, which allows submit register -->
+    <button type="button" style="background-color: #FF0000;color: #FFFFFF;width:170px;height:70px;margin:20px">Cancel</button><!-- Cancel button. No function right now -->
+    {% csrf_token %}
+
+
+
+
+
+
+
+
+
+</p>
+
+    </form>
+    <!-- add functions end-->
+
+
+
+</div>
+
+    <script>
+function show_confirm()
+{
+var r=confirm("Are you sure to submit?");
+if (r==true)
+  {  alert("Submitted Successfully!");
+  location.reload();
+
+  }
+
+}
+function edit_confirm()
+{
+var r=confirm("Are you sure to save this edit?");
+if (r==true)
+  {  alert("Edit Saved Successfully!");
+  location.reload();
+
+  }
+
+}
+
+    </script>
+
+{% endblock %}

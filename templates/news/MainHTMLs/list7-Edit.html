@@ -1,0 +1,158 @@
+
+{% extends "news/base.html" %}
+<!-- This is the Edit Item page extended from base.html-->
+<!-- Only a login user can see this page -->
+{% load static %}
+
+{% block pagetitle %}
+    <!-- Big Title of this page -->
+    <div class="n3">
+<h1 style="font-family: Times">Edit Scenario</h1>
+
+
+</div>
+<div class="div3">
+<i class="fas fa-user-alt"></i>
+
+
+
+<!-- Username and a Logout Button -->
+<!-- If the visitor has not login, it will be nothing here then -->
+<FONT style="FONT-SIZE: 10pt; FILTER: shadow(color = lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial"><strong><a href="{% url 'users:profile' request.session.username %}">{{ request.session.username }}</a></strong></FONT>
+        {% if request.session.username %}
+<a href="{% url 'users:logout' %}"><button type="button">Logout</button></a>
+        {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+<p>
+
+<h1 >
+
+<!-- This is a Search Box. If you print a right name of a scenario here, you can find it -->
+<!-- 4 Correct Scenario Names(No Space before the first word or after the last word): -->
+<!-- The Fall of Empire -->
+<!-- Divided Continent -->
+<!-- Mediterranean War -->
+<!-- Nord Invasion -->
+<div class="div1">
+
+<form action="{% url "news:search" %}" method="get">
+<input type="text" name="search-scenario" placeholder="search-scenario">
+<input type="submit" name="submit" value="search">
+</form>
+
+
+</div>
+<div class="n3">
+<!-- A Subtitle of the page -->
+<FONT style="FONT-SIZE: 17pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: green; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">Different Changeable Battles </FONT>
+</div>
+<div class="div3">
+<!-- Purchase Button, only available for Users logged in-->
+<a href="https://www.taleworlds.com/en/Games/Bannerlord"><button type="button" style="background-color: #7ED321;color: #FFFFFF;width:150px;height:60px">Buy Now for $59.9</button></a>
+
+</div>
+</h1>
+
+
+
+
+</p>
+
+
+<p>
+
+
+<div class="n3">
+<ul>
+<!-- The Navigation menu. Every page will have this menu -->
+<!-- All of the buttons have corresponding hyperlinks to their names -->
+    {% if request.session.username %}<!-- "Home" will link to different pages for a login user and a unlogin visitor -->
+<li><a href="{% url 'news:home' %}">Home</a></li><!-- go to Homepage -->
+    {% else %}
+<li><a href="{% url 'news:alter' %}">Home</a></li><!-- go to HomeNotLogin -->
+    {% endif %}
+
+<li><a href="{% url 'news:list' %}">Scenario</a></li><!-- Item list page button -->
+    {% if request.session.username %}
+<li><a href="{% url 'news:add' %}">Add</a></li><!-- Add Item page button. Only a login user can see it. -->
+<!-- Edit Item page button. Only a login user can see it. -->
+    {% endif %}
+<li><a href="{% url 'news:scenariolist' %}">Detail</a></li><!-- Detail page button -->
+</ul>
+</div>
+
+</p>
+
+
+
+<p>
+
+
+<!-- Listing of different Scenarios -->
+<!-- Each of these scenario titles has a Hyperlink towards the Unit Item page-->
+<!-- each scenario contains an edit button, a delete button, an image and a title -->
+<!-- Only a login user can use the edit button -->
+<!-- Only an Administrator can use the delete button -->
+<div border="0" align="center" style="margin-left:0px">
+    <br/>{% if request.session.username %}<a href="{% url 'news:add' %}"><input type="button" value="Edit" ></a>{% endif %}
+    <img src="{% static "img/s1-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+<a align="center" href="{% url 'news:unit' %}"><FONT style="FONT-SIZE: 20pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">1451 The Fall of Empire &nbsp;</FONT>
+{% if request.session.role == 'admin' %}<input type="button" onclick="show_confirm()" value="Delete" />
+{% endif %}
+</a>
+ </div>
+</p>
+
+<p>
+<div border="0" align="center" style="margin-left:0px">
+<br/>{% if request.session.username %}<a href="{% url 'news:add' %}"><input type="button" value="Edit" ></a>{% endif %}
+
+    <img src="{% static "img/s2-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+<a align="center"href="{% url 'news:unit' %}"><FONT style="FONT-SIZE: 20pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">1456 Divided Continent&nbsp; &nbsp;</FONT>
+{% if request.session.role == 'admin' %}<input type="button" onclick="show_confirm()" value="Delete" />
+{% endif %}
+</a>
+ </div>
+</p><p>
+<div border="0" align="center" style="margin-left:0px">
+<br/>{% if request.session.username %}<a href="{% url 'news:add' %}"><input type="button" value="Edit" ></a>{% endif %}
+    <img src="{% static "img/s3-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+<a align="center"href="{% url 'news:unit' %}"><FONT style="FONT-SIZE: 20pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">1463 Mediterranean War&nbsp;  </FONT>
+{% if request.session.role == 'admin' %}<input type="button" onclick="show_confirm()" value="Delete" />
+{% endif %}</a>
+ </div>
+</p><p>
+<div border="0" align="center" style="margin-left:0px">
+<br/>{% if request.session.username %}<a href="{% url 'news:add' %}"><input type="button" value="Edit" ></a>{% endif %}
+    <img src="{% static "img/s4-1.jpg" %}" width="42%" height="5%" style="vertical-align:middle;"/>
+<a align="center"href="{% url 'news:unit' %}"><FONT style="FONT-SIZE: 20pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">1478 Nord Invasion&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </FONT>
+{% if request.session.role == 'admin' %}<input type="button" onclick="show_confirm()" value="Delete" />
+{% endif %}</a>
+
+</div>
+</p>
+
+
+
+    <script>
+function show_confirm()
+{
+var r=confirm("It cannot be restored after deletion, are you sure to delete?");
+if (r==true)
+  {  alert("Deleted!");
+  location.reload();
+  }
+
+}
+
+
+    </script>
+
+
+
+{% endblock %}

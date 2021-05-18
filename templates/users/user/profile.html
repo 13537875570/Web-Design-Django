@@ -1,0 +1,153 @@
+
+{% extends "news/base.html" %}
+<!-- This is the Detail page extended from base.html-->
+
+{% load static %}
+{% load humanize %}
+
+
+
+{% block pagetitle %}
+    <!-- Big Title of this page -->
+    <div class="n3">
+<h1 style="font-family: Times">Profile of {{ user.username }}</h1>
+
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<p>
+<h1 >
+
+
+
+
+
+<div class="n3">
+<!-- A Subtitle of the page -->
+<FONT style="FONT-SIZE: 17pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: green; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">----Enjoy your own styles here!! </FONT>
+</div>
+<div class="div3">
+
+
+
+</div>
+</h1>
+
+
+
+
+</p>
+
+
+<p>
+
+<div class="n3">
+<ul>
+<!-- The Navigation menu. Every page will have this menu -->
+<!-- All of the buttons have corresponding hyperlinks to their names -->
+    {% if request.session.username %}<!-- "Home" will link to different pages for a login user and a unlogin visitor -->
+<li><a href="{% url 'news:home' %}">Home</a></li><!-- go to Homepage -->
+    {% else %}
+<li><a href="{% url 'news:alter' %}">Home</a></li><!-- go to HomeNotLogin -->
+    {% endif %}
+
+<li><a href="{% url 'news:list' %}">Scenario</a></li><!-- Item list page button -->
+    {% if request.session.username %}
+<li><a href="{% url 'news:add' %}">Add</a></li><!-- Add Item page button. Only a login user can see it. -->
+<!-- Edit Item page button. Only a login user can see it. -->
+    {% endif %}
+<li><a href="{% url 'news:scenariolist' %}">Detail</a></li><!-- Detail page button -->
+</ul>
+</div>
+
+</p>
+
+
+
+
+    <h2 id="section-heading">Profile of {{ user.username}}</h2>
+
+    <dl>
+        <dt>Username</dt>
+        <dd>{{ user.username }}</dd>
+        <dt>First Name</dt>
+        <dd>{{ user.first_name }}</dd>
+        <dt>Last Name</dt>
+        <dd>{{ user.last_name }}</dd>
+        <dt>Email Address</dt>
+        <dd>{{ user.email }}</dd>
+        <dt>Role</dt>
+        <dd>{{ user.details.role }}</dd>
+    </dl>
+
+</form>
+<!-- Edit comment buttons and functions -->
+<form action = "{% url "users:editprofile" user.username %}" method = "POST" >
+
+{% if request.session.username == user.username or request.session.role == "admin" %}
+
+
+<h1><FONT style="FONT-SIZE: 15pt; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="profile"><b>Edit Profile:</b></label></FONT>
+</h1>
+
+
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="register-password"><b>Password*: </b></label></FONT>
+    <input id="register-password" name="password" type="password" required/>
+
+
+
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="firstname"><b>First Name: </b></label></FONT>
+<input id="firstname" name="firstname" type="text" required/>
+
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="lastname"><b>Last Name: </b></label></FONT>
+<input id="lastname" name="lastname" type="text" required/>
+
+<FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="register-email"><b>Email*:</b> </label></FONT>
+<input id="register-email" name="email" type="email" required/>
+
+    <input type="submit" value="Edit" />
+
+{% endif %}
+
+{% csrf_token %}
+</form>
+
+
+
+
+        <!-- Edit buttons and functions -->
+<form action = "{% url "users:editrole" user.username %}" method = "POST" >
+
+{% if request.session.role == 'admin' %}
+
+
+<FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="role"><b>Role*(Only "admin" is an administrator here):</b> </label></FONT>
+<input id="role" name="role" type="text" required/>
+
+    <input type="submit" value="Edit" />
+{% endif %}
+
+{% csrf_token %}
+</form>
+<!-- end edit-->
+
+
+
+
+
+
+{% endblock %}
+
+{% block sidebar %}
+    {% include "actions/action/feed.html" %}
+{% endblock %}

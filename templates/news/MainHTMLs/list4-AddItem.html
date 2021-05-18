@@ -1,0 +1,224 @@
+
+{% extends "news/base.html" %}
+<!-- This is the Add Item page extended from base.html-->
+
+{% load static %}
+
+
+
+{% block pagetitle %}
+    <!-- Big Title of this page -->
+    <div class="n3">
+<h1 style="font-family: Times">Add or Edit Scenario</h1>
+
+
+</div>
+    <div class="div3">
+<i class="fas fa-user-alt"></i>
+
+
+
+<!-- Username and a Logout Button -->
+<!-- If the visitor has not login, it will be nothing here then -->
+<FONT style="FONT-SIZE: 10pt; FILTER: shadow(color = lime#b0c4de); WIDTH: 100%; COLOR: black; LINE-HEIGHT: 150%; FONT-FAMILY: Arial"><strong><a href="{% url 'users:profile' request.session.username %}">{{ request.session.username }}</a></strong></FONT>
+        {% if request.session.username %}
+<a href="{% url 'users:logout' %}"><button type="button">Logout</button></a>
+        {% endif %}
+</div>
+
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+
+
+
+<p>
+
+<h1 >
+
+<!-- This is a Search Box. If you print a right name of a scenario here, you can find it -->
+<!-- 4 Correct Scenario Names(No Space before the first word or after the last word): -->
+<!-- The Fall of Empire -->
+<!-- Divided Continent -->
+<!-- Mediterranean War -->
+<!-- Nord Invasion -->
+<div class="div1">
+<form action="{% url "news:search" %}" method="get">
+<input type="text" name="search-scenario" placeholder="search-scenario">
+<input type="submit" name="submit" value="search">
+</form>
+
+</div>
+<div class="n3">
+
+<!-- A Subtitle of the page -->
+<FONT style="FONT-SIZE: 17pt; FILTER: shadow(color=lime#b0c4de); WIDTH: 100%; COLOR: green; LINE-HEIGHT: 150%; FONT-FAMILY: Arial">New Scenarios Can Be Added to Your List!!</FONT>
+</div>
+<div class="div3">
+
+
+<!-- Purchase Button -->
+<a href="https://www.taleworlds.com/en/Games/Bannerlord"><button type="button" style="background-color: #7ED321;color: #FFFFFF;width:150px;height:60px">Buy Now for $59.9</button></a>
+
+</div>
+</h1>
+
+
+
+
+</p>
+
+
+<p>
+
+
+
+
+
+
+
+<div class="n3">
+<ul>
+<!-- The Navigation menu. Every page will have this menu -->
+<!-- All of the buttons have corresponding hyperlinks to their names -->
+    {% if request.session.username %}<!-- "Home" will link to different pages for a login user and a unlogin visitor -->
+<li><a href="{% url 'news:home' %}">Home</a></li><!-- go to Homepage -->
+    {% else %}
+<li><a href="{% url 'news:alter' %}">Home</a></li><!-- go to HomeNotLogin -->
+    {% endif %}
+
+<li><a href="{% url 'news:scenariolist' %}">Scenarios</a></li><!-- Item list page button -->
+    {% if request.session.username %}
+<li><a href="{% url 'news:add' %}">Add</a></li><!-- Add Item page button. Only a login user can see it. -->
+<!-- Edit Item page button. Only a login user can see it. -->
+    {% endif %}
+<li><a href="{% url 'users:userlist' %}">Userlist</a></li><!-- list of users  -->
+</ul>
+</div>
+
+</p>
+
+
+
+<!-- The elements which allow a user to add: title, year, Kindoms to perform, random map and a description -->
+
+    <!-- -->
+    <div class="n3">
+
+
+
+    <!-- Add functions start here-->
+    <form action = "{% url "news:add" %}" method = "post">
+
+
+
+<p>
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="title"><b>Title*: </b></label></FONT>
+<input id="title" name="title" type="text" required/>
+
+</p>
+
+
+<p>
+<FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="year"><b>Year*:</b> </label></FONT>
+<input id="year" name="year" type="number" required/>
+
+</p>
+
+<p>
+    <FONT style="FONT-SIZE: 15pt;  WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="title"><b>URL*: </b></label></FONT>
+<input id="url" name="url" type="text" required/>
+
+</p>
+
+
+<p>
+<img src="{% static "img/map.jpg"%}" width="45%" height="15%" />
+</p>
+
+
+
+
+
+
+<h1><FONT style="FONT-SIZE: 15pt; WIDTH: 100%; COLOR: black; LINE-HEIGHT: 100%; FONT-FAMILY: Arial"><label for="description"><b>Description*:&nbsp;</b></label></FONT>
+</h1>
+
+
+
+<p>
+<td><textarea id="description" name="description"   cols="80"   rows="7"   style="OVERFLOW:   hidden" required></textarea></td>
+</p>
+
+
+
+
+<!-- -->
+
+
+
+
+
+
+
+    <p>
+
+    <a><b>* = required. </b></a>
+
+    </p>
+
+<!-- User can edit a default scenario; or click on Submit to save; or cancel -->
+    <p>
+
+    <button type="button" style="background-color: #FF8000;color: #FFFFFF;width:170px;height:70px;margin:20px" onclick="edit_confirm()">Edit</button><!-- No function right now  -->
+    <button type="submit" style="background-color: #7ED321;color: #FFFFFF;width:170px;height:70px;margin:20px" >Submit</button><!-- Submit button, which allows add -->
+    <button type="button" style="background-color: #FF0000;color: #FFFFFF;width:170px;height:70px;margin:20px">Cancel</button><!-- Cancel button. No function right now -->
+    {% csrf_token %}
+<!-- onclick="show_confirm()"-->
+
+
+
+
+
+
+
+
+</p>
+
+    </form>
+    <!-- add functions end-->
+
+
+
+</div>
+
+    <script>
+function show_confirm()
+{
+var r=confirm("Are you sure to submit?");
+if (r==true)
+  {  alert("Submitted Successfully!");
+  location.reload();
+
+  }
+
+}
+function edit_confirm()
+{
+var r=confirm("Are you sure to save this edit?");
+if (r==true)
+  {  alert("Edit Saved Successfully!");
+  location.reload();
+
+  }
+
+}
+
+    </script>
+
+{% endblock %}
