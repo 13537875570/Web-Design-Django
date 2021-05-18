@@ -1,5 +1,6 @@
-Link:
-https://cs5774pro6.herokuapp.com/news/
+This is a simulated web design of a game website.
+
+Link:https://cs5774pro6.herokuapp.com/news/
 
 HTMLs are under templates\news\MainHTMLs
 
